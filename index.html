@@ -1,1 +1,67 @@
-<!DOCTYPE html><html><head><meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name=viewport><meta name=format-detection content="telephone=no"><meta content="email=no" name=format-detection><meta name=apple-touch-fullscreen content=yes><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=black><meta http-equiv=Content-Type content="text/html; charset=utf-8"><title>Hi。宝贝！</title><link rel=icon href=https://wx2.sinaimg.cn/mw690/4d227521ly1fcoq8d7jpzj200g00g743.jpg><link href=static/css/app.c40bf2af2aad3f43dfa7220227f71244.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=static/js/manifest.c9f1f49002d0487072ac.js></script><script type=text/javascript src=static/js/vendor.b769607e6d594fe4e252.js></script><script type=text/javascript src=static/js/app.dd44f265da874e0d2a25.js></script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="email=no" name="format-detection">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Hi。宝贝！</title>
+    <link rel="icon" href="https://wx2.sinaimg.cn/mw690/4d227521ly1fcoq8d7jpzj200g00g743.jpg">
+    <link href="static/css/app.c40bf2af2aad3f43dfa7220227f71244.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <!-- 添加背景音乐，初始设为静音以便自动播放，并无限循环 -->
+    <audio id="bg-music" src="static/img/outer.m4a" loop muted style="display:none;"></audio>
+
+    <script type="text/javascript" src="static/js/manifest.c9f1f49002d0487072ac.js"></script>
+    <script type="text/javascript" src="static/js/vendor.b769607e6d594fe4e252.js"></script>
+    <script type="text/javascript" src="static/js/app.dd44f265da874e0d2a25.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var bgMusic = document.getElementById('bg-music');
+
+        // 播放函数：设置起点为 39 秒，并尝试自动播放（静音自动播放允许）
+        function startBgMusic() {
+          if (bgMusic.duration > 39) {
+            bgMusic.currentTime = 39;
+          } else {
+            console.warn("音频时长不足39秒，无法从39秒开始播放。");
+          }
+          bgMusic.play().then(function() {
+            // 播放成功后取消静音，使背景音乐有声音
+            bgMusic.muted = false;
+          }).catch(function(err) {
+            console.log("自动播放被阻止，请通过用户交互启动音乐", err);
+            // 如果自动播放失败，显示一个按钮供用户点击
+            var playButton = document.createElement('button');
+            playButton.textContent = "播放背景音乐";
+            playButton.style.position = "fixed";
+            playButton.style.bottom = "20px";
+            playButton.style.right = "20px";
+            playButton.style.zIndex = 1000;
+            playButton.onclick = function() {
+              bgMusic.play().then(function() {
+                bgMusic.muted = false;
+                playButton.remove();
+              });
+            };
+            document.body.appendChild(playButton);
+          });
+        }
+
+        // 当元数据加载后立即设置播放起点并播放
+        if (bgMusic.readyState >= 1) { // HAVE_METADATA
+          startBgMusic();
+        } else {
+          bgMusic.addEventListener('loadedmetadata', startBgMusic);
+        }
+      });
+    </script>
+  </body>
+</html>
