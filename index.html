@@ -26,13 +26,8 @@
       document.addEventListener('DOMContentLoaded', function() {
         var bgMusic = document.getElementById('bg-music');
 
-        // 播放函数：设置起点为 39 秒，并尝试自动播放（静音自动播放允许）
+        // 播放函数：直接尝试自动播放（静音自动播放允许）
         function startBgMusic() {
-          if (bgMusic.duration > 39) {
-            bgMusic.currentTime = 39;
-          } else {
-            console.warn("音频时长不足39秒，无法从39秒开始播放。");
-          }
           bgMusic.play().then(function() {
             // 播放成功后取消静音，使背景音乐有声音
             bgMusic.muted = false;
@@ -55,7 +50,7 @@
           });
         }
 
-        // 当元数据加载后立即设置播放起点并播放
+        // 当元数据加载后立即播放背景音乐
         if (bgMusic.readyState >= 1) { // HAVE_METADATA
           startBgMusic();
         } else {
